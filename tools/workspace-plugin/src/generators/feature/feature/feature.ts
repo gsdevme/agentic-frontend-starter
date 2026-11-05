@@ -3,7 +3,9 @@ import {
   generateFiles,
   joinPathFragments,
   names,
+  readJson,
   readProjectConfiguration,
+  updateJson,
   updateProjectConfiguration,
   type Tree,
 } from '@nx/devkit';
@@ -67,6 +69,7 @@ export async function featureGenerator(
     tmpl: '',
   });
 
+  declarePeerDependencies(tree, directory, ['@angular/core', '@angular/router']);
   wireLazyRoute(tree, importPath, routePath, n.className);
   wireServerRoute(tree, routePath, renderMode);
   ensureImplicitDependencyOnSpec(tree, projectName, options.spec);
@@ -150,6 +153,31 @@ function wireServerRoute(
     return;
   }
   tree.write(file, src.replace(marker, `${marker}\n${entry}`));
+}
+
+/** Mirror the root Angular version into the library's peerDependencies (checked by @nx/dependency-checks). */
+function declarePeerDependencies(
+  tree: Tree,
+  directory: string,
+  packages: readonly string[],
+): void {
+  const root = readJson<{ dependencies?: Record<string, string> }>(
+    tree,
+    'package.json',
+  );
+  updateJson<{ peerDependencies?: Record<string, string> }>(
+    tree,
+    joinPathFragments(directory, 'package.json'),
+    (pkg) => {
+      pkg.peerDependencies = Object.fromEntries(
+        packages.map((name) => [
+          name,
+          root.dependencies?.[name] ?? '*',
+        ]),
+      );
+      return pkg;
+    },
+  );
 }
 
 /** Changing the spec invalidates the feature's cached tasks so tests re-run against it. */

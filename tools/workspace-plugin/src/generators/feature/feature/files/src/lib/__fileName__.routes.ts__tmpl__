@@ -1,4 +1,4 @@
-import { Route } from '@angular/router';
+import { type Route } from '@angular/router';
 
 /**
  * Routes for feature-<%= fileName %>. Mounted lazily by the shell at `/<%= routePath %>`.
