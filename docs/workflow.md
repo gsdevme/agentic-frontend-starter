@@ -23,6 +23,9 @@
 - **Implementing agent** (Claude Code with Superpowers): everything between approval and PR.
 - **acceptance-author**: fresh context, spec-only input, writes failing Playwright tests.
 - **spec-reviewer**: fresh context, read-only, maps REQ → code → test, flags vacuous tests.
+- **PR reviewer** (`.claude/hooks/pr-review.mjs`): fires after `gh pr create`; runs `/code-review` in a
+  separate headless Claude Code process and posts confirmed findings as PR comments. Set
+  `PR_REVIEW_SKIP=1` in your shell to opt out for a trivial PR.
 
 ## Artefacts and where they live
 
