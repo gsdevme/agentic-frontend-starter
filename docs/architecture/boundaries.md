@@ -13,10 +13,11 @@ Two tag dimensions on every project (`project.json` → `tags`):
 | `e2e`     | `apps/*-e2e`                                                          | util                            | Acceptance tests.                                        |
 | `tooling` | `tools/*`                                                             | tooling                         | Generators and scripts.                                  |
 
-| `scope:`   | Rule                                                          |
-| ---------- | ------------------------------------------------------------- |
-| `shared`   | May depend only on `shared`. Cannot own features.             |
-| `<domain>` | May depend on itself and `shared`. Registered in `scopes.md`. |
+| `scope:`   | Rule                                                                                                  |
+| ---------- | ----------------------------------------------------------------------------------------------------- |
+| `shared`   | May depend only on `shared`. Cannot own features.                                                     |
+| `<domain>` | May depend on itself and `shared`. Registered in `scopes.md`.                                         |
+| `shell`    | Composition root: may depend on any scope (to mount features by route) but owns no business features. |
 
 Enforced twice: `@nx/enforce-module-boundaries` in `eslint.config.mjs` (fast, per import) and
 `.dependency-cruiser.cjs` in `pnpm verify` (whole graph: cycles, orphans, features-are-leaves,

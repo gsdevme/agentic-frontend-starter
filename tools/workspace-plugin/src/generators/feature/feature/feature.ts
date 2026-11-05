@@ -128,13 +128,14 @@ function wireLazyRoute(
   const entry =
     `  {\n    path: '${routePath}',\n` +
     `    loadChildren: () => import('${importPath}').then((m) => m.${className}Routes),\n  },\n`;
-  const marker = 'export const appRoutes: Route[] = [';
+  // Insert immediately before the catch-all so '**' stays last.
+  const marker = "  {\n    path: '**',";
   if (!src.includes(marker)) {
     throw new Error(
-      `${SHELL_ROUTES} must contain "${marker}" so routes can be appended deterministically.`,
+      `${SHELL_ROUTES} must keep a trailing \`{ path: '**', … }\` route so features can be inserted before it.`,
     );
   }
-  tree.write(SHELL_ROUTES, src.replace(marker, `${marker}\n${entry}`));
+  tree.write(SHELL_ROUTES, src.replace(marker, `${entry}${marker}`));
 }
 
 function wireServerRoute(

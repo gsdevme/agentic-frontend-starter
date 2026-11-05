@@ -55,3 +55,26 @@ test.describe('shell SSR contract', () => {
     expect(await res.json()).toEqual({ status: 'ok' });
   });
 });
+
+test.describe('shell routing contract', () => {
+  test('[REQ-SHELL-003] default route renders the placeholder home page', async ({
+    page,
+    axe,
+  }) => {
+    await page.goto('/');
+    await expect(
+      page.getByTestId('home-page').getByRole('heading', { level: 1 }),
+    ).toBeVisible();
+    await axe();
+  });
+
+  test('[REQ-SHELL-004] unknown URLs return a real 404 with a not-found page', async ({
+    page,
+    axe,
+  }) => {
+    const response = await page.goto('/this-route-does-not-exist');
+    expect(response?.status()).toBe(404);
+    await expect(page.getByTestId('not-found-page')).toBeVisible();
+    await axe();
+  });
+});

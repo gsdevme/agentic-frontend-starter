@@ -34,8 +34,16 @@ module.exports = {
       severity: 'error',
       comment:
         'A feature may only be reached by the shell via a lazy route, never imported by another library.',
-      from: { path: '^packages/' },
+      from: { path: '^packages/', pathNot: '^packages/[^/]+/feature-' },
       to: { path: '^packages/[^/]+/feature-' },
+    },
+    {
+      name: 'no-feature-to-feature',
+      severity: 'error',
+      comment:
+        'Features do not import each other; share code through type:ui/data/util libraries.',
+      from: { path: '^packages/([^/]+)/(feature-[^/]+)/' },
+      to: { path: '^packages/[^/]+/feature-', pathNot: '^packages/$1/$2/' },
     },
     {
       name: 'no-deep-imports',

@@ -13,10 +13,18 @@ import checkFile from 'eslint-plugin-check-file';
  */
 const SCOPES = ['shell'];
 
-const scopeConstraints = SCOPES.map((scope) => ({
-  sourceTag: `scope:${scope}`,
-  onlyDependOnLibsWithTags: [`scope:${scope}`, 'scope:shared'],
-}));
+/**
+ * `shell` is the composition root: it mounts every scope's features by lazy route, so it may
+ * depend on any scope. Every other scope may depend only on itself and `shared`.
+ */
+const scopeConstraints = SCOPES.map((scope) =>
+  scope === 'shell'
+    ? { sourceTag: 'scope:shell', onlyDependOnLibsWithTags: ['*'] }
+    : {
+        sourceTag: `scope:${scope}`,
+        onlyDependOnLibsWithTags: [`scope:${scope}`, 'scope:shared'],
+      },
+);
 
 export default [
   ...nx.configs['flat/base'],

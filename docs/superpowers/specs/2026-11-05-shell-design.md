@@ -26,6 +26,8 @@ mounts every business feature as a lazy-loaded library. It is the only deployabl
 
 - REQ-SHELL-001 — The shell renders a `<main id="main">` landmark containing the router outlet.
 - REQ-SHELL-002 — The first focusable element is a skip link targeting `#main`.
+- REQ-SHELL-003 — The default route `/` renders a placeholder page with a single h1 until a feature redirects it.
+- REQ-SHELL-004 — Unknown URLs render a not-found page and the server responds with HTTP 404.
 - REQ-SSR-001 — Every route renders meaningful HTML with JavaScript disabled.
 - REQ-SSR-002 — Hydration completes with no console or page errors.
 - REQ-SSR-003 — Rendered pages have no WCAG 2.2 AA violations (axe-core).
