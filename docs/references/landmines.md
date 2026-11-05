@@ -11,6 +11,15 @@ Build-time allow-list: `apps/shell/project.json` → `build.options.security.all
 `NG_ALLOWED_HOSTS=app.example.com,*.internal.example.com`. Never `*` unless a trusted proxy
 validates `Host`/`X-Forwarded-Host` upstream.
 
+## Node major lives in `.nvmrc`
+
+`.nvmrc` is canonical; nvm, fnm and CI (`node-version-file`) read it. `Dockerfile` FROM lines
+cannot, so `ARG NODE_MAJOR` there is the one duplicated place, and
+`scripts/verify/node-version.mjs` (first `pnpm verify` stage) checks it and the running Node
+against `.nvmrc`. `.npmrc` sets `engine-strict=true`, so `pnpm install` refuses the wrong major:
+run `nvm use` first. Node >= 25 dropped corepack, so install pnpm with
+`npm i -g pnpm@<packageManager version>` after `nvm use`.
+
 ## Stale Nx project graph
 
 Symptoms: `@nx/dependency-checks` says a package "is not used" although it is imported; a generator

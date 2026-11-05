@@ -6,7 +6,7 @@
  *
  *   pnpm verify            # affected projects (local / agent loop)
  *   pnpm verify --all      # everything (CI, release)
- *   pnpm verify --quick    # format + lint + typecheck + unit only (PostToolUse hook)
+ *   pnpm verify --quick    # node version + spec gate + format + lint + typecheck + unit + traceability
  */
 import { spawnSync } from 'node:child_process';
 
@@ -18,6 +18,7 @@ const nx = (targets, extra = '') =>
   `pnpm exec nx ${scope} -t ${targets} --parallel=3 ${extra}`.trim();
 
 const stages = [
+  ['node version', 'node scripts/verify/node-version.mjs'],
   ['spec gate', 'node scripts/verify/spec-approved.mjs'],
   ['format', 'pnpm exec nx format:check --all'],
   ['lint', nx('lint')],
