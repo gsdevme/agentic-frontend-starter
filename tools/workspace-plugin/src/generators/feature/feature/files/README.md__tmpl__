@@ -1,0 +1,15 @@
+# <%= projectName %>
+
+| | |
+| --- | --- |
+| Import path | `<%= importPath %>` |
+| Tags | `scope:<%= scope %>`, `type:feature` |
+| Route | `/<%= routePath %>` (render mode: `<%= renderMode %>`) |
+| Spec | [`<%= spec %>`](../../../<%= spec %>) |
+
+## Contract
+
+- May depend on: `type:ui`, `type:data`, `type:util`, `type:tokens` within `scope:<%= scope %>` or `scope:shared`.
+- May NOT be imported by any other project (features are leaves; the shell mounts them by route).
+- Every test cites a requirement id from the spec. Every requirement in the spec has at least one test.
+- Acceptance scenarios live in `apps/shell-e2e/src/<%= fileName %>.spec.ts` and are written from the spec's Given/When/Then before implementation.

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://www.designtokens.org/schema/2025.10/tokens.json",
+  "color": {
+    "$type": "color",
+    "$description": "PLACEHOLDER palette. Replace with the export from your Claude design system; keep the key structure so generated CSS variable names stay stable.",
+    "background": {
+      "default": { "$value": "#ffffff" },
+      "subtle": { "$value": "#f6f7f9" }
+    },
+    "text": {
+      "default": { "$value": "#111827" },
+      "muted": { "$value": "#4b5563" },
+      "inverse": { "$value": "#ffffff" }
+    },
+    "border": {
+      "default": { "$value": "#e5e7eb" }
+    },
+    "accent": {
+      "default": { "$value": "#1d4ed8" },
+      "hover": { "$value": "#1e40af" }
+    },
+    "danger": {
+      "default": { "$value": "#b91c1c" }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+/**
+ * Entry page for feature-<%= fileName %>.
+ * Spec: <%= spec %>
+ *
+ * Rules (enforced by lint + reviewer agent):
+ * - OnPush, signals for state, no direct DOM access, no `any`.
+ * - UI primitives come from @starter/shared/ui; styling via `var(--ds-*)` tokens only.
+ * - Data access lives in a `type:data` library, never in this component.
+ */
+@Component({
+  selector: '<%= scope %>-<%= fileName %>-page',
+  templateUrl: './<%= fileName %>-page.html',
+  styleUrl: './<%= fileName %>-page.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class <%= className %>Page {}

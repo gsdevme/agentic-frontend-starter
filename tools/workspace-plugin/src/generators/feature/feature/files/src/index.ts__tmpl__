@@ -1,0 +1,1 @@
+export { <%= className %>Routes } from './lib/<%= fileName %>.routes';

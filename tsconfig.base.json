@@ -1,0 +1,54 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "bundler",
+    "importHelpers": true,
+    "isolatedModules": true,
+    "target": "es2022",
+    "module": "es2022",
+    "lib": [
+      "es2022",
+      "dom",
+      "dom.iterable"
+    ],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "useDefineForClassFields": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "paths": {
+      "@starter/tools": [
+        "./tools/workspace-plugin/src/index.ts"
+      ],
+      "@starter/shared/ui": [
+        "./packages/shared/ui/src/index.ts"
+      ]
+    }
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": true,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictStandalone": true,
+    "extendedDiagnostics": {
+      "defaultCategory": "error"
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "tmp",
+    "dist"
+  ]
+}

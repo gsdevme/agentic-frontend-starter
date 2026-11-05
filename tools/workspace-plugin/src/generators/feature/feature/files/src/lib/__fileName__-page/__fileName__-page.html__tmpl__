@@ -1,0 +1,4 @@
+<section aria-labelledby="<%= fileName %>-heading" data-testid="<%= fileName %>-page">
+  <h1 id="<%= fileName %>-heading"><%= className %></h1>
+  <!-- Implement per <%= spec %>. Delete this comment when the first acceptance test passes. -->
+</section>

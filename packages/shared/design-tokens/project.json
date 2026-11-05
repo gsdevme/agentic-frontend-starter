@@ -1,0 +1,25 @@
+{
+  "name": "design-tokens",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/shared/design-tokens/src",
+  "tags": ["scope:shared", "type:tokens"],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": ["{projectRoot}/tokens/**/*", "{projectRoot}/build.mjs"],
+      "outputs": ["{projectRoot}/src"],
+      "options": {
+        "command": "node packages/shared/design-tokens/build.mjs"
+      }
+    },
+    "check-fresh": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "options": {
+        "command": "git diff --exit-code -- packages/shared/design-tokens/src || (echo 'design-tokens/src is stale: run pnpm nx run design-tokens:build and commit the output' && exit 1)"
+      }
+    }
+  }
+}

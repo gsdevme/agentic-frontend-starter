@@ -1,0 +1,13 @@
+import { Route } from '@angular/router';
+
+/**
+ * Routes for feature-<%= fileName %>. Mounted lazily by the shell at `/<%= routePath %>`.
+ * Spec: <%= spec %>
+ */
+export const <%= className %>Routes: Route[] = [
+  {
+    path: '',
+    loadComponent: () =>
+      import('./<%= fileName %>-page/<%= fileName %>-page').then((m) => m.<%= className %>Page),
+  },
+];

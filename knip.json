@@ -1,0 +1,52 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "workspaces": {
+    ".": {
+      "entry": [
+        "apps/*/src/main.ts",
+        "apps/*/src/main.server.ts",
+        "apps/*/src/server.ts",
+        "apps/*-e2e/src/**/*.spec.ts",
+        "apps/*-e2e/playwright.config.mts",
+        "packages/**/src/index.ts",
+        "packages/shared/design-tokens/build.mjs",
+        "tools/workspace-plugin/src/index.ts",
+        "tools/workspace-plugin/src/generators/*/*/*.ts",
+        "scripts/**/*.mjs",
+        ".claude/hooks/*.mjs"
+      ],
+      "project": ["apps/**/*.{ts,mts}", "packages/**/*.{ts,mts}", "tools/**/*.ts", "scripts/**/*.mjs", ".claude/hooks/*.mjs"],
+      "ignore": [
+        "**/*.d.ts",
+        "packages/shared/design-tokens/src/**",
+        "tools/workspace-plugin/src/generators/**/files/**"
+      ],
+      "ignoreDependencies": [
+        "@angular/compiler",
+        "@angular/platform-server",
+        "@angular/language-service",
+        "@angular-devkit/.*",
+        "@schematics/angular",
+        "@nx/.*",
+        "@stryker-mutator/vitest-runner",
+        "jsdom",
+        "tslib",
+        "@swc.*",
+        "jsonc-eslint-parser",
+        "eslint-config-prettier"
+      ],
+      "ignoreBinaries": ["nx"]
+    }
+  },
+  "ignoreExportsUsedInFile": true,
+  "rules": {
+    "unlisted": "error",
+    "unresolved": "error",
+    "exports": "error",
+    "types": "error",
+    "files": "error",
+    "dependencies": "error",
+    "devDependencies": "warn",
+    "duplicates": "error"
+  }
+}

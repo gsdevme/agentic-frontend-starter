@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "$id": "Feature",
+  "title": "Scaffold a lazy-loaded feature library",
+  "description": "Creates packages/<scope>/feature-<name> with tags scope:<scope>,type:feature, a routes file, an OnPush page component with spec, a README linking the approved spec, and wires a lazy route into the shell. Refuses to run unless --spec points at an existing approved design doc.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Feature name in kebab-case, e.g. 'invoice-list'. Becomes feature-<name>.",
+      "$default": { "$source": "argv", "index": 0 },
+      "x-prompt": "Feature name (kebab-case)?",
+      "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$"
+    },
+    "scope": {
+      "type": "string",
+      "description": "Domain scope tag, e.g. 'billing'. Must be listed in docs/architecture/scopes.md.",
+      "x-prompt": "Domain scope (kebab-case)?",
+      "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$"
+    },
+    "spec": {
+      "type": "string",
+      "description": "Path to the approved design doc, e.g. docs/superpowers/specs/2026-11-05-invoice-list-design.md. Must exist.",
+      "x-prompt": "Path to the approved spec?"
+    },
+    "route": {
+      "type": "string",
+      "description": "URL path segment to mount the feature on. Defaults to <name>."
+    },
+    "renderMode": {
+      "type": "string",
+      "enum": ["server", "prerender", "client"],
+      "default": "server",
+      "description": "SSR render mode for the feature's routes. 'client' requires a justification in the spec."
+    }
+  },
+  "required": ["name", "scope", "spec"]
+}

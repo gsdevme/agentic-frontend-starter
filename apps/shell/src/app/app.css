@@ -1,0 +1,26 @@
+/* Layout only. All colour/spacing values come from design tokens (packages/shared/design-tokens). */
+:host {
+  display: block;
+  min-height: 100dvh;
+  background: var(--ds-color-background-default);
+  color: var(--ds-color-text-default);
+  font-family: var(--ds-font-family-base);
+}
+.skip-link {
+  position: absolute;
+  left: -999px;
+}
+.skip-link:focus {
+  left: var(--ds-space-2);
+  top: var(--ds-space-2);
+}
+.app-header {
+  padding: var(--ds-space-3) var(--ds-space-4);
+  border-bottom: 1px solid var(--ds-color-border-default);
+}
+.app-title {
+  font-weight: var(--ds-font-weight-semibold);
+}
+.app-main {
+  padding: var(--ds-space-4);
+}

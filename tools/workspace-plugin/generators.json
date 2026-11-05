@@ -1,0 +1,9 @@
+{
+  "generators": {
+    "feature": {
+      "factory": "./src/generators/feature/feature/feature",
+      "schema": "./src/generators/feature/feature/schema.json",
+      "description": "Scaffold a lazy-loaded feature library with correct tags, route, spec stub and docs entry"
+    }
+  }
+}

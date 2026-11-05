@@ -1,0 +1,22 @@
+{
+  "$schema": "https://www.designtokens.org/schema/2025.10/tokens.json",
+  "font": {
+    "family": {
+      "$type": "fontFamily",
+      "base": { "$value": ["Inter", "system-ui", "sans-serif"] },
+      "mono": { "$value": ["JetBrains Mono", "ui-monospace", "monospace"] }
+    },
+    "weight": {
+      "$type": "fontWeight",
+      "regular": { "$value": 400 },
+      "semibold": { "$value": 600 }
+    },
+    "size": {
+      "$type": "dimension",
+      "sm": { "$value": { "value": 14, "unit": "px" } },
+      "md": { "$value": { "value": 16, "unit": "px" } },
+      "lg": { "$value": { "value": 20, "unit": "px" } },
+      "xl": { "$value": { "value": 28, "unit": "px" } }
+    }
+  }
+}

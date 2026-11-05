@@ -1,0 +1,31 @@
+/**
+ * Do not edit directly, this file was auto-generated.
+ */
+
+:root {
+  --ds-color-background-default: #ffffff;
+  --ds-color-background-subtle: #f6f7f9;
+  --ds-color-text-default: #111827;
+  --ds-color-text-muted: #4b5563;
+  --ds-color-text-inverse: #ffffff;
+  --ds-color-border-default: #e5e7eb;
+  --ds-color-accent-default: #1d4ed8;
+  --ds-color-accent-hover: #1e40af;
+  --ds-color-danger-default: #b91c1c;
+  --ds-space-1: 4px;
+  --ds-space-2: 8px;
+  --ds-space-3: 12px;
+  --ds-space-4: 16px;
+  --ds-space-6: 24px;
+  --ds-space-8: 32px;
+  --ds-radius-sm: 4px;
+  --ds-radius-md: 8px;
+  --ds-font-family-base: Inter, system-ui, sans-serif;
+  --ds-font-family-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --ds-font-weight-regular: 400;
+  --ds-font-weight-semibold: 600;
+  --ds-font-size-sm: 14px;
+  --ds-font-size-md: 16px;
+  --ds-font-size-lg: 20px;
+  --ds-font-size-xl: 28px;
+}
