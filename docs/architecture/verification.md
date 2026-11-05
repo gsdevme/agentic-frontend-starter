@@ -4,6 +4,7 @@ What each layer catches, in the order `pnpm verify` runs them. Cheap and local f
 
 | #   | Stage            | Tool                                                                                                                                                         | Catches                                                                                                                              |
 | --- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| 0   | node version     | `scripts/verify/node-version.mjs`                                                                                                                            | Running Node, or `Dockerfile` base-image tags, on a different major from `.nvmrc`                                                    |
 | 1   | spec gate        | `scripts/verify/spec-approved.mjs`                                                                                                                           | Work without an approved spec; plans pointing at drafts                                                                              |
 | 2   | format           | prettier via `nx format:check`                                                                                                                               | Noise in diffs                                                                                                                       |
 | 3   | lint             | ESLint 9 flat + typescript-eslint (type-aware) + angular-eslint strict + a11y + boundaries + check-file                                                      | Wrong layer imports, outdated Angular idioms, `any`, unsafe promises, oversized files, bad names, disabled tests, inline rule bypass |
@@ -18,7 +19,7 @@ What each layer catches, in the order `pnpm verify` runs them. Cheap and local f
 | 12  | test weakening   | `scripts/verify/no-test-weakening.mjs`                                                                                                                       | Deleted/reduced tests; acceptance tests edited alongside implementation                                                              |
 | CI  | mutation         | StrykerJS on `type:data`/`type:util` (incremental, `break: 70`)                                                                                              | Tests that pass without asserting behaviour                                                                                          |
 
-`verify:quick` = stages 1–6 (seconds; used by hooks and pre-commit). `verify` = 1–12 on affected
+`verify:quick` = stages 0–6 (seconds; used by hooks and pre-commit). `verify` = 0–12 on affected
 projects. `verify:all` = everything on every project (CI, pre-push).
 
 ## Agent-side loop

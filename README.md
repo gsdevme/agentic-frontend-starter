@@ -10,20 +10,22 @@ cannot mark work done until `pnpm verify` is green.
 
 ## What is in the box
 
-| Layer         | What                                                                                                                                                                                                                      | Where                                                                                                   |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| App           | Zoneless Angular 22, `@angular/ssr` Node server, per-route render modes, health endpoint, accessible shell                                                                                                                | `apps/shell`                                                                                            |
-| Design system | DTCG tokens → Style Dictionary → CSS vars + TS types; empty UI library with a conformance test                                                                                                                            | `packages/shared/design-tokens`, `packages/shared/ui`                                                   |
-| Structure     | Nx 24 tags (`scope` × `type`) + `@nx/enforce-module-boundaries`; dependency-cruiser; Knip; strict TS; type-aware ESLint; angular-eslint strict + a11y; file/size/naming rules; no inline rule bypass                      | `eslint.config.mjs`, `eslint.angular.mjs`, `.dependency-cruiser.cjs`, `knip.json`                       |
-| Scaffolding   | `feature` generator: refuses unapproved specs and unregistered scopes, wires the lazy route and render mode, stamps tags and spec traceability                                                                            | `tools/workspace-plugin`                                                                                |
-| Specs         | Superpowers conventions (`docs/superpowers/specs                                                                                                                                                                          | plans`), EARS requirements with `REQ-…` ids, approved-spec immutability, acceptance tests derived first | `docs/`, `scripts/verify/` |
-| Verification  | `pnpm verify`: spec gate → format → lint → typecheck → unit → traceability → graph → dead code → tokens → SSR build → Playwright (no-JS render, hydration, axe WCAG 2.2 AA) → anti-test-weakening; Stryker in CI          | `scripts/verify/all.mjs`, `apps/shell-e2e`, `stryker.config.mjs`                                        |
-| Agent wiring  | `AGENTS.md` map (CLAUDE.md imports it), Claude Code hooks (command/path guards, per-edit lint, Stop gate), read-only `spec-reviewer` and `acceptance-author` subagents, project skills, plugins declared at project scope | `.claude/`                                                                                              |
-| CI            | GitHub Actions: `verify:all` on every PR, mutation testing on changed pure logic, Playwright report artefact                                                                                                              | `.github/workflows/ci.yml`                                                                              |
+| Layer         | What                                                                                                                                                                                                                            | Where                                                                                                   |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| App           | Zoneless Angular 22, `@angular/ssr` Node server, per-route render modes, health endpoint, accessible shell                                                                                                                      | `apps/shell`                                                                                            |
+| Design system | DTCG tokens → Style Dictionary → CSS vars + TS types; empty UI library with a conformance test                                                                                                                                  | `packages/shared/design-tokens`, `packages/shared/ui`                                                   |
+| Structure     | Nx 24 tags (`scope` × `type`) + `@nx/enforce-module-boundaries`; dependency-cruiser; Knip; strict TS; type-aware ESLint; angular-eslint strict + a11y; file/size/naming rules; no inline rule bypass                            | `eslint.config.mjs`, `eslint.angular.mjs`, `.dependency-cruiser.cjs`, `knip.json`                       |
+| Scaffolding   | `feature` generator: refuses unapproved specs and unregistered scopes, wires the lazy route and render mode, stamps tags and spec traceability                                                                                  | `tools/workspace-plugin`                                                                                |
+| Specs         | Superpowers conventions (`docs/superpowers/specs                                                                                                                                                                                | plans`), EARS requirements with `REQ-…` ids, approved-spec immutability, acceptance tests derived first | `docs/`, `scripts/verify/` |
+| Verification  | `pnpm verify`: node version → spec gate → format → lint → typecheck → unit → traceability → graph → dead code → tokens → SSR build → Playwright (no-JS render, hydration, axe WCAG 2.2 AA) → anti-test-weakening; Stryker in CI | `scripts/verify/all.mjs`, `apps/shell-e2e`, `stryker.config.mjs`                                        |
+| Agent wiring  | `AGENTS.md` map (CLAUDE.md imports it), Claude Code hooks (command/path guards, per-edit lint, Stop gate), read-only `spec-reviewer` and `acceptance-author` subagents, project skills, plugins declared at project scope       | `.claude/`                                                                                              |
+| CI            | GitHub Actions: `verify:all` on every PR, mutation testing on changed pure logic, Playwright report artefact                                                                                                                    | `.github/workflows/ci.yml`                                                                              |
 
 ## Quick start
 
 ```bash
+nvm use                      # or `fnm use`: Node major from .nvmrc (pnpm install refuses others)
+npm i -g pnpm@10.28.0        # Node >= 25 ships no corepack; match package.json#packageManager
 pnpm install                 # also installs git hooks (pre-commit: verify:quick, pre-push: verify)
 pnpm exec playwright install chromium
 pnpm verify:all              # everything should be green on a fresh clone
@@ -80,6 +82,29 @@ scripts/verify/             verification gates (all.mjs is the entry point)
 docs/                       constitution, workflow, architecture, superpowers specs & plans, ADRs, references
 .claude/                    settings (plugins, permissions, hooks), hooks, agents, skills
 ```
+
+## Deployment
+
+The root `Dockerfile` builds the SSR shell into a distroless Node image:
+
+```bash
+docker build -t shell:local .
+docker run --rm -p 4000:4000 -e NG_ALLOWED_HOSTS=localhost shell:local
+```
+
+| Variable           | Default | Purpose                                                                                                                                                  |
+| ------------------ | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `PORT`             | `4000`  | Port the SSR server listens on.                                                                                                                          |
+| `NG_ALLOWED_HOSTS` | none    | Comma-separated hostnames the server will render for. Must list every ingress hostname, or Angular SSR answers 400 (see `docs/references/landmines.md`). |
+
+- **Probes:** point readiness and liveness probes at `GET /healthz` (returns `200 {"status":"ok"}`).
+  The image has no `HEALTHCHECK`; the orchestrator probes the endpoint itself.
+- **Image:** `gcr.io/distroless/nodejs<major>-debian13:nonroot`. It runs as a non-root user and has
+  no shell or package manager, so `docker exec … sh` will not work.
+- **Debugging:** to get a busybox shell, edit the runtime `FROM` tag from `nonroot` to `debug-nonroot`
+  in a local build only. Never ship the debug tag to production.
+- **Node version:** always the newest Active LTS, pinned in `.nvmrc`; the Dockerfile's `NODE_MAJOR`
+  must match it (`pnpm verify` checks). Policy and bump procedure: `docs/adr/0002-node-latest-lts.md`.
 
 ## Status
 

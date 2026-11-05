@@ -20,8 +20,8 @@ agents write code. Nothing is "done" until `pnpm verify` passes — hooks enforc
 ## Commands (always via nx; never call eslint/vitest/ng directly)
 
 ```
-pnpm verify            # affected: spec gate → format → lint → build libs → unit → traceability → depcruise → knip → SSR build → e2e
-pnpm verify:quick      # the first six stages only (what the PostToolUse/Stop hooks run)
+pnpm verify            # affected: node version → spec gate → format → lint → build libs → unit → traceability → depcruise → knip → SSR build → e2e
+pnpm verify:quick      # the first seven stages only (what the PostToolUse/Stop hooks run)
 pnpm nx g @starter/tools:feature <name> --scope=<scope> --spec=docs/superpowers/specs/<file>.md
 pnpm nx g @nx/angular:component --path=packages/shared/ui/src/lib/<name>/<name> --export
 pnpm nx run shell:serve           # dev server (SSR) on :4200
@@ -47,6 +47,8 @@ dispatch `spec-reviewer` subagent → open PR. Superpowers skills (`brainstormin
 - Every test title starts with its requirement id: `it('[REQ-INVOICE-003] …')`.
 - New libraries come from generators, never by hand. New scopes are a human decision (see scopes.md).
 - Only `packages/shared/ui` contains UI primitives; only `var(--ds-*)` tokens appear in CSS.
+- Node = latest LTS, pinned in `.nvmrc`; `pnpm verify` fails on any other major. Bumping it means
+  `.nvmrc`, `Dockerfile` FROM lines and CI together (see `docs/adr/0002-node-latest-lts.md`).
 - Stop claiming completion without the fresh `pnpm verify` output in your message.
 
 ## Landmines (full list in docs/references/landmines.md)

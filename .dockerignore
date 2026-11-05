@@ -1,0 +1,36 @@
+# Build context for the root Dockerfile. Anything the shell build does not read stays out, so
+# the context is small and local artefacts never leak into an image layer.
+
+# Installed or generated locally; the build stage recreates what it needs.
+node_modules
+dist
+tmp
+out-tsc
+coverage
+reports
+.stryker-tmp
+.nx
+.angular
+
+# VCS, agent harness and editor state: not build inputs.
+.git
+.githooks
+.github
+.claude
+.vscode
+.idea
+
+# Documentation is never compiled into the app.
+docs
+**/*.md
+
+# Docker's own files, so editing them does not invalidate the `COPY . .` layer.
+Dockerfile
+.dockerignore
+
+# Noise.
+*.log
+.DS_Store
+
+# Deliberately kept: apps/shell-e2e and tools/. Nx builds its project graph from every
+# project.json in the workspace, and the shell build needs that graph to be complete.
