@@ -2,7 +2,10 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "extraKnownMarketplaces": {
     "nx-claude-plugins": {
-      "source": { "source": "github", "repo": "nrwl/nx-ai-agents-config" }
+      "source": {
+        "source": "github",
+        "repo": "nrwl/nx-ai-agents-config"
+      }
     }
   },
   "enabledPlugins": {
@@ -83,6 +86,18 @@
             "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/lint-changed-file.mjs",
             "timeout": 120,
             "statusMessage": "Linting and type-checking the edited file"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(gh pr create*)",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/pr-review.mjs",
+            "timeout": 15,
+            "statusMessage": "Dispatching independent PR review"
           }
         ]
       }
