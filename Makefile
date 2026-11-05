@@ -10,7 +10,7 @@ SHELL := /bin/bash
 .DEFAULT_GOAL := help
 
 PNPM          ?= pnpm
-NODE_MAJOR    := $(shell cat .nvmrc)
+NODE_MAJOR    := $(shell sed -E 's/^v?([0-9]+).*/\1/' .nvmrc)
 PNPM_VERSION  := $(shell sed -n 's/.*"packageManager": *"pnpm@\([^"]*\)".*/\1/p' package.json)
 IMAGE         ?= shell:local
 PORT          ?= 4000
@@ -34,7 +34,9 @@ check-node: ## Fail unless the active Node major matches .nvmrc
 	  echo "Node $$actual active; .nvmrc wants $(NODE_MAJOR). Run: nvm use" >&2; exit 1; \
 	fi
 
-setup: check-node install browsers ## Fresh-clone setup: dependencies, git hooks, Playwright browser
+setup: ## Fresh-clone setup: dependencies, git hooks, Playwright browser (humans only)
+	$(MAKE) install
+	$(MAKE) browsers
 	@echo "Setup complete. Try: make verify-all, then make dev"
 
 install: check-node ## Install dependencies (also installs git hooks via prepare)
@@ -44,7 +46,7 @@ install: check-node ## Install dependencies (also installs git hooks via prepare
 hooks: ## Re-install the git hooks without reinstalling dependencies
 	node .claude/hooks/install-git-hooks.mjs
 
-browsers: ## Download the Chromium build Playwright needs for e2e
+browsers: ## Download the Chromium build Playwright needs for e2e (humans only; agents may not)
 	$(PNPM) exec playwright install chromium
 
 ## ──────────────────────── Develop ────────────────────────
@@ -58,7 +60,9 @@ build: check-node ## Production SSR build into dist/apps/shell
 serve: ## Run the production SSR server from dist (PORT, default 4000)
 	PORT=$(PORT) NG_ALLOWED_HOSTS=$(ALLOWED_HOSTS) $(PNPM) serve:ssr
 
-preview: build serve ## Build, then serve the production bundle
+preview: ## Build, then serve the production bundle
+	$(MAKE) build
+	$(MAKE) serve
 
 tokens: ## Rebuild design tokens (CSS vars + TS types) from DTCG JSON
 	$(PNPM) tokens
