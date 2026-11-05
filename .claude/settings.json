@@ -1,18 +1,114 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "extraKnownMarketplaces": {
     "nx-claude-plugins": {
-      "source": {
-        "source": "github",
-        "repo": "nrwl/nx-ai-agents-config"
-      }
+      "source": { "source": "github", "repo": "nrwl/nx-ai-agents-config" }
     }
   },
   "enabledPlugins": {
+    "superpowers@claude-plugins-official": true,
     "nx@nx-claude-plugins": true
   },
-  "sandbox": {
-    "network": {
-      "allowedDomains": ["www.google-analytics.com"]
-    }
+  "permissions": {
+    "allow": [
+      "Bash(pnpm verify*)",
+      "Bash(pnpm nx *)",
+      "Bash(pnpm exec nx *)",
+      "Bash(pnpm test*)",
+      "Bash(pnpm lint*)",
+      "Bash(pnpm build*)",
+      "Bash(pnpm e2e*)",
+      "Bash(pnpm knip*)",
+      "Bash(pnpm depcruise*)",
+      "Bash(pnpm format*)",
+      "Bash(node scripts/verify/*)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git switch *)",
+      "Bash(git worktree *)"
+    ],
+    "deny": [
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(git commit --no-verify*)",
+      "Bash(git commit -n *)",
+      "Bash(git reset --hard*)",
+      "Bash(rm -rf /*)",
+      "Edit(.claude/settings.json)",
+      "Write(.claude/settings.json)",
+      "Edit(.claude/hooks/**)",
+      "Write(.claude/hooks/**)",
+      "Edit(.github/workflows/**)",
+      "Write(.github/workflows/**)",
+      "Edit(eslint.config.mjs)",
+      "Edit(eslint.angular.mjs)",
+      "Edit(.dependency-cruiser.cjs)",
+      "Edit(docs/constitution.md)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/guard-bash.mjs",
+            "timeout": 10,
+            "statusMessage": "Checking command against repo policy"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/guard-paths.mjs",
+            "timeout": 10,
+            "statusMessage": "Checking path ownership"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/lint-changed-file.mjs",
+            "timeout": 120,
+            "statusMessage": "Linting and type-checking the edited file"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/stop-verify.mjs",
+            "timeout": 600,
+            "statusMessage": "Running pnpm verify:quick before allowing completion"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/session-context.mjs",
+            "timeout": 20
+          }
+        ]
+      }
+    ]
   }
 }

@@ -21,7 +21,7 @@ const SCOPES_DOC = 'docs/architecture/scopes.md';
  * remember (tags, import path, lazy route, OnPush, spec stub, README) is
  * produced here so reviews only need to look at behaviour.
  */
-export async function featureGenerator(
+async function featureGenerator(
   tree: Tree,
   options: FeatureGeneratorSchema,
 ): Promise<void> {
@@ -69,7 +69,10 @@ export async function featureGenerator(
     tmpl: '',
   });
 
-  declarePeerDependencies(tree, directory, ['@angular/core', '@angular/router']);
+  declarePeerDependencies(tree, directory, [
+    '@angular/core',
+    '@angular/router',
+  ]);
   wireLazyRoute(tree, importPath, routePath, n.className);
   wireServerRoute(tree, routePath, renderMode);
   ensureImplicitDependencyOnSpec(tree, projectName, options.spec);
@@ -170,10 +173,7 @@ function declarePeerDependencies(
     joinPathFragments(directory, 'package.json'),
     (pkg) => {
       pkg.peerDependencies = Object.fromEntries(
-        packages.map((name) => [
-          name,
-          root.dependencies?.[name] ?? '*',
-        ]),
+        packages.map((name) => [name, root.dependencies?.[name] ?? '*']),
       );
       return pkg;
     },

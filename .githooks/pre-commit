@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+# Quick gate on every commit (same as the Claude Code Stop hook).
+set -e
+pnpm verify:quick

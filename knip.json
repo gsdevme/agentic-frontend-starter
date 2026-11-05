@@ -12,30 +12,32 @@
         "packages/shared/design-tokens/build.mjs",
         "tools/workspace-plugin/src/index.ts",
         "tools/workspace-plugin/src/generators/*/*/*.ts",
-        "scripts/**/*.mjs",
-        ".claude/hooks/*.mjs"
+        "scripts/verify/*.mjs",
+        ".claude/hooks/*.mjs",
+        "eslint.angular.mjs",
+        "**/eslint.config.mjs",
+        "vitest.mutation.config.mts"
       ],
-      "project": ["apps/**/*.{ts,mts}", "packages/**/*.{ts,mts}", "tools/**/*.ts", "scripts/**/*.mjs", ".claude/hooks/*.mjs"],
-      "ignore": [
-        "**/*.d.ts",
-        "packages/shared/design-tokens/src/**",
-        "tools/workspace-plugin/src/generators/**/files/**"
+      "project": [
+        "apps/**/*.{ts,mts,mjs}",
+        "packages/**/*.{ts,mts,mjs}",
+        "tools/**/*.{ts,mjs}",
+        "scripts/verify/*.mjs",
+        ".claude/hooks/*.mjs",
+        "*.mjs",
+        "*.mts"
       ],
+      "ignore": ["**/*.d.ts", "packages/shared/design-tokens/src/**"],
       "ignoreDependencies": [
-        "@angular/compiler",
-        "@angular/platform-server",
         "@angular/language-service",
-        "@angular-devkit/.*",
-        "@schematics/angular",
+        "@angular/cli",
         "@nx/.*",
-        "@stryker-mutator/vitest-runner",
-        "jsdom",
-        "tslib",
-        "@swc.*",
-        "jsonc-eslint-parser",
-        "eslint-config-prettier"
+        "@eslint/js",
+        "@typescript-eslint/utils",
+        "autoprefixer",
+        "prettier"
       ],
-      "ignoreBinaries": ["nx"]
+      "ignoreBinaries": ["dot"]
     }
   },
   "ignoreExportsUsedInFile": true,

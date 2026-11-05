@@ -5,3 +5,9 @@
 /.nx/workspace-data
 .nx/self-healing
 .angular
+
+# generated
+packages/shared/design-tokens/src
+reports
+.stryker-tmp
+pnpm-lock.yaml

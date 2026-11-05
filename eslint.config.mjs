@@ -41,32 +41,65 @@ export default [
     },
   },
   {
-    files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx', '**/*.mts', '**/*.mjs'],
+    files: [
+      '**/*.ts',
+      '**/*.tsx',
+      '**/*.js',
+      '**/*.jsx',
+      '**/*.mts',
+      '**/*.mjs',
+    ],
     rules: {
       '@nx/enforce-module-boundaries': [
         'error',
         {
           enforceBuildableLibDependency: true,
-          allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?[jt]s$', '^.*/eslint\\.angular\\.mjs$'],
+          allow: [
+            '^.*/eslint(\\.base)?\\.config\\.[cm]?[jt]s$',
+            '^.*/eslint\\.angular\\.mjs$',
+          ],
           banTransitiveDependencies: true,
           checkDynamicDependenciesExceptions: [],
           depConstraints: [
-            { sourceTag: 'scope:shared', onlyDependOnLibsWithTags: ['scope:shared'] },
+            {
+              sourceTag: 'scope:shared',
+              onlyDependOnLibsWithTags: ['scope:shared'],
+            },
             ...scopeConstraints,
             {
               sourceTag: 'type:app',
-              onlyDependOnLibsWithTags: ['type:feature', 'type:ui', 'type:data', 'type:util', 'type:tokens'],
+              onlyDependOnLibsWithTags: [
+                'type:feature',
+                'type:ui',
+                'type:data',
+                'type:util',
+                'type:tokens',
+              ],
             },
             {
               sourceTag: 'type:feature',
-              onlyDependOnLibsWithTags: ['type:ui', 'type:data', 'type:util', 'type:tokens'],
+              onlyDependOnLibsWithTags: [
+                'type:ui',
+                'type:data',
+                'type:util',
+                'type:tokens',
+              ],
             },
-            { sourceTag: 'type:ui', onlyDependOnLibsWithTags: ['type:ui', 'type:util', 'type:tokens'] },
-            { sourceTag: 'type:data', onlyDependOnLibsWithTags: ['type:data', 'type:util'] },
+            {
+              sourceTag: 'type:ui',
+              onlyDependOnLibsWithTags: ['type:ui', 'type:util', 'type:tokens'],
+            },
+            {
+              sourceTag: 'type:data',
+              onlyDependOnLibsWithTags: ['type:data', 'type:util'],
+            },
             { sourceTag: 'type:util', onlyDependOnLibsWithTags: ['type:util'] },
             { sourceTag: 'type:tokens', onlyDependOnLibsWithTags: [] },
             { sourceTag: 'type:e2e', onlyDependOnLibsWithTags: ['type:util'] },
-            { sourceTag: 'type:tooling', onlyDependOnLibsWithTags: ['type:tooling'] },
+            {
+              sourceTag: 'type:tooling',
+              onlyDependOnLibsWithTags: ['type:tooling'],
+            },
           ],
         },
       ],
@@ -88,13 +121,19 @@ export default [
       '@typescript-eslint/no-misused-promises': 'error',
       '@typescript-eslint/await-thenable': 'error',
       '@typescript-eslint/require-await': 'error',
-      '@typescript-eslint/switch-exhaustiveness-check': ['error', { considerDefaultExhaustiveForUnions: true }],
+      '@typescript-eslint/switch-exhaustiveness-check': [
+        'error',
+        { considerDefaultExhaustiveForUnions: true },
+      ],
       '@typescript-eslint/no-unsafe-assignment': 'error',
       '@typescript-eslint/no-unsafe-call': 'error',
       '@typescript-eslint/no-unsafe-member-access': 'error',
       '@typescript-eslint/no-unsafe-return': 'error',
       '@typescript-eslint/no-unsafe-argument': 'error',
-      '@typescript-eslint/restrict-template-expressions': ['error', { allowNumber: true, allowBoolean: true }],
+      '@typescript-eslint/restrict-template-expressions': [
+        'error',
+        { allowNumber: true, allowBoolean: true },
+      ],
       '@typescript-eslint/prefer-readonly': 'error',
     },
   },
@@ -103,26 +142,37 @@ export default [
     ignores: ['**/*.spec.ts', '**/*.test.ts', '**/*.d.ts'],
     rules: {
       // Size and shape limits: small, cohesive units are cheaper for agents to read and review.
-      'max-lines': ['error', { max: 300, skipBlankLines: true, skipComments: true }],
-      'max-lines-per-function': ['error', { max: 60, skipBlankLines: true, skipComments: true }],
+      'max-lines': [
+        'error',
+        { max: 300, skipBlankLines: true, skipComments: true },
+      ],
+      'max-lines-per-function': [
+        'error',
+        { max: 60, skipBlankLines: true, skipComments: true },
+      ],
       'max-depth': ['error', 4],
       'max-params': ['error', 5],
       complexity: ['error', 12],
       // Type discipline beyond tsconfig.
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-non-null-assertion': 'error',
-      '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports', fixStyle: 'inline-type-imports' }],
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        { prefer: 'type-imports', fixStyle: 'inline-type-imports' },
+      ],
       '@typescript-eslint/explicit-module-boundary-types': 'error',
       // No wildcard barrels: they hide the import graph from agents and from the boundary rule.
       'no-restricted-syntax': [
         'error',
         {
           selector: 'ExportAllDeclaration',
-          message: 'Wildcard re-exports (`export * from`) are banned. Export names explicitly so the public API is reviewable.',
+          message:
+            'Wildcard re-exports (`export * from`) are banned. Export names explicitly so the public API is reviewable.',
         },
         {
           selector: "CallExpression[callee.object.name='console']",
-          message: 'No console.* in application code. Use the logger from a `type:util` library.',
+          message:
+            'No console.* in application code. Use the logger from a `type:util` library.',
         },
       ],
       'no-restricted-imports': [
@@ -131,7 +181,8 @@ export default [
           patterns: [
             {
               group: ['**/src/lib/**', '../../**/src/**'],
-              message: 'Deep imports are banned. Import a library only through its @starter/* alias (its public API).',
+              message:
+                'Deep imports are banned. Import a library only through its @starter/* alias (its public API).',
             },
             {
               group: ['rxjs/internal/*'],
@@ -159,7 +210,10 @@ export default [
     files: ['**/*.spec.ts', '**/*.test.ts'],
     rules: {
       // Tests may be longer, but each `it` must cite a requirement id (checked by scripts/verify/require-req-ids.mjs).
-      'max-lines': ['error', { max: 600, skipBlankLines: true, skipComments: true }],
+      'max-lines': [
+        'error',
+        { max: 600, skipBlankLines: true, skipComments: true },
+      ],
       '@typescript-eslint/no-explicit-any': 'error',
       'no-restricted-syntax': [
         'error',
@@ -169,10 +223,12 @@ export default [
         },
         {
           selector: "CallExpression[callee.property.name='skip']",
-          message: 'Skipped tests may not be committed. Delete the test or fix it, and record the decision in the spec.',
+          message:
+            'Skipped tests may not be committed. Delete the test or fix it, and record the decision in the spec.',
         },
         {
-          selector: "CallExpression[callee.name='xit'], CallExpression[callee.name='xdescribe'], CallExpression[callee.name='xtest']",
+          selector:
+            "CallExpression[callee.name='xit'], CallExpression[callee.name='xdescribe'], CallExpression[callee.name='xtest']",
           message: 'Disabled tests may not be committed.',
         },
       ],
@@ -190,12 +246,24 @@ export default [
         },
         { ignoreMiddleExtensions: true },
       ],
-      'check-file/folder-naming-convention': ['error', { 'apps/**/': 'KEBAB_CASE', 'packages/**/': 'KEBAB_CASE' }],
+      'check-file/folder-naming-convention': [
+        'error',
+        { 'apps/**/': 'KEBAB_CASE', 'packages/**/': 'KEBAB_CASE' },
+      ],
       'check-file/no-index': 'off', // index.ts is the ONLY allowed barrel, at a library root
     },
   },
   {
-    files: ['**/*.ts', '**/*.tsx', '**/*.cts', '**/*.mts', '**/*.js', '**/*.jsx', '**/*.cjs', '**/*.mjs'],
+    files: [
+      '**/*.ts',
+      '**/*.tsx',
+      '**/*.cts',
+      '**/*.mts',
+      '**/*.js',
+      '**/*.jsx',
+      '**/*.cjs',
+      '**/*.mjs',
+    ],
     rules: {},
   },
 ];

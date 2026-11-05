@@ -12,6 +12,14 @@ const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
 
 const app = express();
+
+/**
+ * Angular's SSR engine rejects requests whose Host header is not allow-listed
+ * (SSRF protection; see angular.dev/best-practices/security). Build-time hosts
+ * live in project.json → build.options.security.allowedHosts. At runtime add
+ * deployment hostnames with NG_ALLOWED_HOSTS="app.example.com,*.internal" —
+ * never "*" unless a trusted proxy validates Host/X-Forwarded-Host upstream.
+ */
 const angularApp = new AngularNodeAppEngine();
 
 /** Liveness probe used by CI and the Playwright webServer readiness check. */

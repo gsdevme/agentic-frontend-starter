@@ -32,7 +32,8 @@ module.exports = {
     {
       name: 'features-are-leaves',
       severity: 'error',
-      comment: 'A feature may only be reached by the shell via a lazy route, never imported by another library.',
+      comment:
+        'A feature may only be reached by the shell via a lazy route, never imported by another library.',
       from: { path: '^packages/' },
       to: { path: '^packages/[^/]+/feature-' },
     },
@@ -49,14 +50,23 @@ module.exports = {
     {
       name: 'ui-has-no-data-access',
       severity: 'error',
-      comment: 'Design-system components are presentational; data access lives in type:data libraries.',
+      comment:
+        'Design-system components are presentational; data access lives in type:data libraries.',
       from: { path: '^packages/shared/ui/' },
-      to: { path: ['^packages/[^/]+/data', '@angular/common/http', 'rxjs/ajax', 'rxjs/fetch'] },
+      to: {
+        path: [
+          '^packages/[^/]+/data',
+          '@angular/common/http',
+          'rxjs/ajax',
+          'rxjs/fetch',
+        ],
+      },
     },
     {
       name: 'no-server-only-in-browser-code',
       severity: 'error',
-      comment: 'Node built-ins and the SSR engine may only be referenced from server.ts.',
+      comment:
+        'Node built-ins and the SSR engine may only be referenced from server.ts.',
       from: { path: '^(apps|packages)/.+\\.ts$', pathNot: '/server\\.ts$' },
       to: { path: ['^node:', '^express$', '^@angular/ssr/node'] },
     },
@@ -66,7 +76,13 @@ module.exports = {
       comment: 'Runtime code may not import devDependencies.',
       from: {
         path: '^(apps|packages)/',
-        pathNot: ['\\.(spec|test|stories)\\.ts$', '/test-setup\\.ts$', '^apps/[^/]+-e2e/', '\\.config\\.(mjs|cjs|mts|ts)$', '/build\\.mjs$'],
+        pathNot: [
+          '\\.(spec|test|stories)\\.ts$',
+          '/test-setup\\.ts$',
+          '^apps/[^/]+-e2e/',
+          '\\.config\\.(mjs|cjs|mts|ts)$',
+          '/build\\.mjs$',
+        ],
       },
       to: { dependencyTypes: ['npm-dev'], dependencyTypesNot: ['type-only'] },
     },
@@ -79,7 +95,9 @@ module.exports = {
   ],
   options: {
     doNotFollow: { path: ['node_modules', 'dist', '\\.nx'] },
-    exclude: { path: '(\\.spec\\.ts$|\\.test\\.ts$|/files/|eslint[.a-z]*\\.mjs$)' },
+    exclude: {
+      path: '(\\.spec\\.ts$|\\.test\\.ts$|/files/|eslint[.a-z]*\\.mjs$)',
+    },
     tsPreCompilationDeps: true,
     tsConfig: { fileName: 'tsconfig.base.json' },
     enhancedResolveOptions: {

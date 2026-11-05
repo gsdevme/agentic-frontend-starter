@@ -9,11 +9,7 @@
     "isolatedModules": true,
     "target": "es2022",
     "module": "es2022",
-    "lib": [
-      "es2022",
-      "dom",
-      "dom.iterable"
-    ],
+    "lib": ["es2022", "dom", "dom.iterable"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "useDefineForClassFields": false,
@@ -29,12 +25,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "paths": {
-      "@starter/tools": [
-        "./tools/workspace-plugin/src/index.ts"
-      ],
-      "@starter/shared/ui": [
-        "./packages/shared/ui/src/index.ts"
-      ]
+      "@starter/tools": ["./tools/workspace-plugin/src/index.ts"],
+      "@starter/shared/ui": ["./packages/shared/ui/src/index.ts"]
     }
   },
   "angularCompilerOptions": {
@@ -46,9 +38,5 @@
       "defaultCategory": "error"
     }
   },
-  "exclude": [
-    "node_modules",
-    "tmp",
-    "dist"
-  ]
+  "exclude": ["node_modules", "tmp", "dist"]
 }

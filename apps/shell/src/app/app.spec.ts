@@ -10,7 +10,7 @@ describe('App (shell)', () => {
     }).compileComponents();
   });
 
-  it('renders a landmark main region with a router outlet', async () => {
+  it('[REQ-SHELL-001] renders a landmark main region with a router outlet', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const el = fixture.nativeElement as HTMLElement;
@@ -18,7 +18,7 @@ describe('App (shell)', () => {
     expect(el.querySelector('router-outlet')).not.toBeNull();
   });
 
-  it('exposes a skip link as the first focusable element', async () => {
+  it('[REQ-SHELL-002] exposes a skip link as the first focusable element', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     const el = fixture.nativeElement as HTMLElement;

@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+# Full gate before anything leaves the machine.
+set -e
+pnpm verify

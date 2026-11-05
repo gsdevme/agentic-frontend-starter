@@ -20,14 +20,17 @@
             "input": "apps/shell/public"
           }
         ],
-        "styles": ["apps/shell/src/styles.css"],
+        "styles": [
+          "packages/shared/design-tokens/src/tokens.css",
+          "apps/shell/src/styles.css"
+        ],
         "server": "apps/shell/src/main.server.ts",
         "ssr": {
           "entry": "apps/shell/src/server.ts"
         },
         "outputMode": "server",
         "security": {
-          "allowedHosts": []
+          "allowedHosts": ["localhost", "127.0.0.1"]
         }
       },
       "configurations": {

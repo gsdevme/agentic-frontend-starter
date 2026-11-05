@@ -1,78 +1,61 @@
 import { defineConfig, devices } from '@playwright/test';
 import { nxE2EPreset } from '@nx/playwright/preset';
-import { getReadyUrl, workspaceRoot } from '@nx/devkit';
-
-const isCI = !!process.env['CI'];
-// For CI, you may want to set BASE_URL to the deployed application.
-// getReadyUrl moves the address to the port the dev server task reported.
-const baseURL = process.env['BASE_URL'] || getReadyUrl('http://localhost:4200');
+import { workspaceRoot } from '@nx/devkit';
 
 /**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
+ * E2E runs against the PRODUCTION SSR server, never the dev server, so what is
+ * tested is what ships: server-rendered HTML, hydration, and client navigation.
+ * `pnpm nx e2e shell-e2e` builds the app first (see project.json dependsOn).
  */
-// import 'dotenv/config';
+const port = Number(process.env['PORT'] ?? 4000);
+const baseURL = process.env['BASE_URL'] ?? `http://localhost:${port}`;
+const isCI = Boolean(process.env['CI']);
 
-/**
- * See https://playwright.dev/docs/test-configuration.
- *
- * Generated as a .mts file so Node forces ESM regardless of workspace
- * `type`. Playwright routes `.mts` through its ESM loader (dynamic import,
- * bypassing the pirates CJS-compile path), and Nx's native TS strip loads
- * `.mts` directly. Playwright's configLoader auto-discovers
- * `playwright.config.mts` via its extension list
- * (.ts/.js/.mts/.mjs/.cts/.cjs).
- */
 export default defineConfig({
   ...nxE2EPreset(import.meta.dirname, { testDir: './src' }),
-  /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
+  fullyParallel: true,
+  forbidOnly: true, // `.only` never reaches CI (also linted)
+  retries: isCI ? 1 : 0,
+  reporter: isCI
+    ? [
+        ['github'],
+        [
+          'html',
+          {
+            open: 'never',
+            outputFolder: '../../dist/.playwright/apps/shell-e2e/report',
+          },
+        ],
+        [
+          'json',
+          { outputFile: '../../dist/.playwright/apps/shell-e2e/results.json' },
+        ],
+      ]
+    : [
+        ['list'],
+        [
+          'html',
+          {
+            open: 'never',
+            outputFolder: '../../dist/.playwright/apps/shell-e2e/report',
+          },
+        ],
+      ],
   use: {
     baseURL,
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    trace: 'retain-on-failure',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
   },
   webServer: {
-    command: isCI
-      ? 'pnpm exec nx run shell:serve-static'
-      : 'pnpm exec nx run shell:serve',
-    url: getReadyUrl('http://localhost:4200'),
-    reuseExistingServer: true,
+    command: `PORT=${port} node dist/apps/shell/server/server.mjs`,
+    url: `${baseURL}/healthz`,
+    reuseExistingServer: !isCI,
     cwd: workspaceRoot,
+    timeout: 30_000,
   },
   projects: [
-    {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-    },
-
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
-
-    // Uncomment for mobile browsers support
-    /* {
-      name: 'Mobile Chrome',
-      use: { ...devices['Pixel 5'] },
-    },
-    {
-      name: 'Mobile Safari',
-      use: { ...devices['iPhone 12'] },
-    }, */
-
-    // Uncomment for branded browsers
-    /* {
-      name: 'Microsoft Edge',
-      use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    },
-    {
-      name: 'Google Chrome',
-      use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-    } */
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    // Add firefox / webkit / mobile projects when the spec requires them.
   ],
 });

@@ -23,11 +23,14 @@ const publicApi = import.meta.glob('./index.ts', {
 }) as Record<string, string>;
 
 const componentFiles = Object.entries(sources)
-  .filter(([file, src]) => !file.endsWith('.spec.ts') && /@Component\(/.test(src))
+  .filter(
+    ([file, src]) => !file.endsWith('.spec.ts') && /@Component\(/.test(src),
+  )
   .map(([file]) => file);
 
 const RAW_COLOUR = /#[0-9a-f]{3,8}\b|\brgba?\(|\bhsla?\(/i;
-const RAW_SIZE = /\b(font-size|padding|margin|gap|border-radius)\s*:\s*[0-9.]+(px|rem|em)/i;
+const RAW_SIZE =
+  /\b(font-size|padding|margin|gap|border-radius)\s*:\s*[0-9.]+(px|rem|em)/i;
 
 describe('design-system conformance', () => {
   it('[REQ-DS-001] every component has a colocated spec', () => {

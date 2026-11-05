@@ -17,7 +17,7 @@ export default [
       'playwright/no-element-handle': 'error',
       'playwright/no-eval': 'error',
       'playwright/prefer-web-first-assertions': 'error',
-      'playwright/expect-expect': 'error',
+      'playwright/expect-expect': ['error', { assertFunctionNames: ['axe'] }],
       'playwright/missing-playwright-await': 'error',
       // e2e files are allowed console for debugging artefacts; everything else from base applies.
       'no-restricted-syntax': 'off',

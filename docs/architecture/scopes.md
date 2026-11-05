@@ -12,7 +12,7 @@ code and may never own a feature.
 
 The `feature` generator refuses scopes that are not in this table.
 
-| Scope | Owner | Description |
-| --- | --- | --- |
+| Scope    | Owner    | Description                                                                   |
+| -------- | -------- | ----------------------------------------------------------------------------- |
 | `shared` | platform | Cross-cutting: design tokens, UI library, utilities. Cannot contain features. |
-| `shell` | platform | The root application: layout, routing, auth plumbing, server entry. |
+| `shell`  | platform | The root application: layout, routing, auth plumbing, server entry.           |

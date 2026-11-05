@@ -9,12 +9,21 @@ export function angularConfig(prefix) {
   return [
     ...nx.configs['flat/angular'],
     ...nx.configs['flat/angular-template'],
-    ...angular.configs.templateAccessibility.map((c) => ({ ...c, files: ['**/*.html'] })),
+    ...angular.configs.templateAccessibility.map((c) => ({
+      ...c,
+      files: ['**/*.html'],
+    })),
     {
       files: ['**/*.ts'],
       rules: {
-        '@angular-eslint/directive-selector': ['error', { type: 'attribute', prefix, style: 'camelCase' }],
-        '@angular-eslint/component-selector': ['error', { type: 'element', prefix, style: 'kebab-case' }],
+        '@angular-eslint/directive-selector': [
+          'error',
+          { type: 'attribute', prefix, style: 'camelCase' },
+        ],
+        '@angular-eslint/component-selector': [
+          'error',
+          { type: 'element', prefix, style: 'kebab-case' },
+        ],
         // Modern Angular only.
         '@angular-eslint/prefer-standalone': 'error',
         '@angular-eslint/prefer-signals': 'error',
@@ -40,7 +49,10 @@ export function angularConfig(prefix) {
         '@angular-eslint/use-component-view-encapsulation': 'error',
         '@angular-eslint/relative-url-prefix': 'error',
         '@angular-eslint/consistent-component-styles': ['error', 'string'],
-        '@angular-eslint/component-max-inline-declarations': ['error', { template: 10, styles: 5, animations: 0 }],
+        '@angular-eslint/component-max-inline-declarations': [
+          'error',
+          { template: 10, styles: 5, animations: 0 },
+        ],
         '@angular-eslint/sort-lifecycle-methods': 'error',
       },
     },
@@ -63,8 +75,14 @@ export function angularConfig(prefix) {
         '@angular-eslint/template/no-autofocus': 'error',
         '@angular-eslint/template/button-has-type': 'error',
         '@angular-eslint/template/eqeqeq': 'error',
-        '@angular-eslint/template/conditional-complexity': ['error', { maxComplexity: 4 }],
-        '@angular-eslint/template/cyclomatic-complexity': ['error', { maxComplexity: 10 }],
+        '@angular-eslint/template/conditional-complexity': [
+          'error',
+          { maxComplexity: 4 },
+        ],
+        '@angular-eslint/template/cyclomatic-complexity': [
+          'error',
+          { maxComplexity: 10 },
+        ],
         '@angular-eslint/template/use-track-by-function': 'off', // @for requires `track` already
         '@angular-eslint/template/require-switch-default': 'error',
       },

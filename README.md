@@ -1,109 +1,88 @@
-# New Nx Repository
+# Agentic Frontend Starter
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+An empty, production-shaped **Angular 22 SSR** monorepo built to be written almost entirely by AI
+coding agents under spec-driven development. There is no feature code here — only the harness:
+hard-line specs, structural guardrails, a verification pyramid, and agent workflow wiring
+(Claude Code + [Superpowers](https://github.com/obra/superpowers)).
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+Humans write and approve specs, make architectural decisions and merge. Agents do the rest, and
+cannot mark work done until `pnpm verify` is green.
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/docs/technologies/typescript/introduction?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+## What is in the box
 
-🚀 If you haven't connected to Nx Cloud yet, [complete your setup here](https://cloud.nx.app/get-started). Get faster builds with remote caching, distributed task execution, and self-healing CI. [See how your workspace can benefit](#nx-cloud).
+| Layer         | What                                                                                                                                                                                                                      | Where                                                                                                   |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| App           | Zoneless Angular 22, `@angular/ssr` Node server, per-route render modes, health endpoint, accessible shell                                                                                                                | `apps/shell`                                                                                            |
+| Design system | DTCG tokens → Style Dictionary → CSS vars + TS types; empty UI library with a conformance test                                                                                                                            | `packages/shared/design-tokens`, `packages/shared/ui`                                                   |
+| Structure     | Nx 24 tags (`scope` × `type`) + `@nx/enforce-module-boundaries`; dependency-cruiser; Knip; strict TS; type-aware ESLint; angular-eslint strict + a11y; file/size/naming rules; no inline rule bypass                      | `eslint.config.mjs`, `eslint.angular.mjs`, `.dependency-cruiser.cjs`, `knip.json`                       |
+| Scaffolding   | `feature` generator: refuses unapproved specs and unregistered scopes, wires the lazy route and render mode, stamps tags and spec traceability                                                                            | `tools/workspace-plugin`                                                                                |
+| Specs         | Superpowers conventions (`docs/superpowers/specs                                                                                                                                                                          | plans`), EARS requirements with `REQ-…` ids, approved-spec immutability, acceptance tests derived first | `docs/`, `scripts/verify/` |
+| Verification  | `pnpm verify`: spec gate → format → lint → typecheck → unit → traceability → graph → dead code → tokens → SSR build → Playwright (no-JS render, hydration, axe WCAG 2.2 AA) → anti-test-weakening; Stryker in CI          | `scripts/verify/all.mjs`, `apps/shell-e2e`, `stryker.config.mjs`                                        |
+| Agent wiring  | `AGENTS.md` map (CLAUDE.md imports it), Claude Code hooks (command/path guards, per-edit lint, Stop gate), read-only `spec-reviewer` and `acceptance-author` subagents, project skills, plugins declared at project scope | `.claude/`                                                                                              |
+| CI            | GitHub Actions: `verify:all` on every PR, mutation testing on changed pure logic, Playwright report artefact                                                                                                              | `.github/workflows/ci.yml`                                                                              |
 
-## Generate a library
+## Quick start
 
-```sh
-npx nx g @nx/js:lib packages/pkg1 --publishable --importPath=@my-org/pkg1
+```bash
+pnpm install                 # also installs git hooks (pre-commit: verify:quick, pre-push: verify)
+pnpm exec playwright install chromium
+pnpm verify:all              # everything should be green on a fresh clone
+pnpm nx run shell:serve      # SSR dev server → http://localhost:4200
 ```
 
-## Run tasks
+Open the repo in Claude Code. `.claude/settings.json` enables the `superpowers` and `nx` plugins at
+project scope; accept the prompt to install them locally. The Nx MCP server is configured by the Nx
+plugin.
 
-To build the library use:
+## Delivering the first feature
 
-```sh
-npx nx run pkg1:build
+1. **Register a scope** (human): add a row to `docs/architecture/scopes.md`, add it to `SCOPES` in
+   `eslint.config.mjs`, write an ADR.
+2. **Brainstorm → spec** (agent + human): `superpowers:brainstorming` produces
+   `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md` from `_TEMPLATE.md`. The human sets
+   `Status: approved`.
+3. **Plan** (agent): `superpowers:writing-plans` → `docs/superpowers/plans/…`.
+4. **Acceptance tests first** (agent): dispatch `acceptance-author`; commit the failing Playwright file alone.
+5. **Scaffold** (agent): `pnpm nx g @starter/tools:feature <name> --scope=<scope> --spec=<spec>`.
+6. **Implement** (agent): red → green → `pnpm verify:quick` → commit, per task.
+7. **Gate + review** (agent): `pnpm verify`, then the `spec-reviewer` subagent.
+8. **PR** (agent) → **merge** (human). CI re-runs `verify:all`.
+
+The full procedure, with the reasons behind each step, is in `docs/workflow.md` and the
+`feature-workflow` skill.
+
+## Wiring in your design system
+
+Export the design system's tokens as DTCG JSON into `packages/shared/design-tokens/tokens/`, run
+`pnpm tokens`, commit. Implement components in `packages/shared/ui` from their specs; the
+conformance test enforces token-only styling and a spec per component. See
+`packages/shared/design-tokens/README.md`.
+
+## Guardrail philosophy
+
+Prose instructions are advisory; hooks, lint and CI are deterministic. Every rule in
+`docs/constitution.md` names the mechanism that enforces it. When an agent keeps violating an
+instruction, the fix is a new check, not a louder sentence in `AGENTS.md`.
+
+Human-owned files (hooks, lint configs, CI, constitution, approved specs, acceptance tests) are
+blocked for agents by `.claude/hooks/guard-paths.mjs`; the escape hatches (`ALLOW_ACCEPTANCE_EDIT=1`,
+`ALLOW_GENERATOR_EDIT=1`) are environment variables a human sets in their own shell.
+
+## Layout
+
+```
+apps/shell/                 the one deployable (SSR)
+apps/shell-e2e/             Playwright acceptance tests against the production server
+packages/shared/            design-tokens, ui (type:tokens, type:ui)
+packages/<scope>/           feature-*, data, util-* (created by generators)
+tools/workspace-plugin/     Nx generators (@starter/tools:feature)
+scripts/verify/             verification gates (all.mjs is the entry point)
+docs/                       constitution, workflow, architecture, superpowers specs & plans, ADRs, references
+.claude/                    settings (plugins, permissions, hooks), hooks, agents, skills
 ```
 
-To run any task with Nx use:
+## Status
 
-```sh
-npx nx run <project-name>:<target>
-```
-
-These targets are either [inferred automatically](https://nx.dev/docs/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
-
-[More about running tasks in the docs &raquo;](https://nx.dev/docs/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Versioning and releasing
-
-To version and release the library use
-
-```
-npx nx release
-```
-
-Pass `--dry-run` to see what would happen without actually releasing the library.
-
-[Learn more about Nx release &raquo;](https://nx.dev/docs/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Keep TypeScript project references up to date
-
-Nx automatically updates TypeScript [project references](https://www.typescriptlang.org/docs/handbook/project-references.html) in `tsconfig.json` files to ensure they remain accurate based on your project dependencies (`import` or `require` statements). This sync is automatically done when running tasks such as `build` or `typecheck`, which require updated references to function correctly.
-
-To manually trigger the process to sync the project graph dependencies information to the TypeScript project references, run the following command:
-
-```sh
-npx nx sync
-```
-
-You can enforce that the TypeScript project references are always in the correct state when running in CI by adding a step to your CI job configuration that runs the following command:
-
-```sh
-npx nx sync:check
-```
-
-[Learn more about nx sync](https://nx.dev/reference/nx-commands#sync)
-
-## Nx Cloud
-
-Nx Cloud ensures a [fast and scalable CI](https://nx.dev/nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
-
-- [Remote caching](https://nx.dev/docs/features/ci-features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/docs/features/ci-features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/docs/features/ci-features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/docs/features/ci-features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-### Set up CI (non-Github Actions CI)
-
-**Note:** This is only required if your CI provider is not GitHub Actions.
-
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
-```
-
-[Learn more about Nx on CI](https://nx.dev/docs/features/ci-features?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/docs/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## 🔗 Learn More
-
-- [Nx Documentation](https://nx.dev/docs)
-- [Crafting Your Workspace Tutorial](https://nx.dev/docs/getting-started/tutorials/crafting-your-workspace)
-- [Module Boundaries](https://nx.dev/docs/features/enforce-module-boundaries)
-- [Releasing Packages](https://nx.dev/docs/features/manage-releases)
-- [Nx Plugins](https://nx.dev/docs/concepts/nx-plugins)
-- [Nx Cloud](https://nx.dev/nx-cloud)
-
-## 💬 Community
-
-Join the Nx community:
-
-- [Discord](https://go.nx.dev/community)
-- [X (Twitter)](https://twitter.com/nxdevtools)
-- [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [YouTube](https://www.youtube.com/@nxdevtools)
-- [Blog](https://nx.dev/blog)
+Template v0.1 (2026-11-05). Known follow-ups are listed at the end of
+`docs/architecture/verification.md` (Storybook, visual regression, API contract generation) and in
+ADR 0001.
