@@ -32,6 +32,9 @@ pnpm verify:all              # everything should be green on a fresh clone
 pnpm nx run shell:serve      # SSR dev server → http://localhost:4200
 ```
 
+A `Makefile` wraps the same commands: `make setup` for a fresh clone, `make dev`, `make verify`,
+`make preview`, `make docker-build`. Run `make help` for the full list.
+
 Open the repo in Claude Code. `.claude/settings.json` enables the `superpowers` and `nx` plugins at
 project scope; accept the prompt to install them locally. The Nx MCP server is configured by the Nx
 plugin.
