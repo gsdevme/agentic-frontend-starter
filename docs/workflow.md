@@ -9,7 +9,7 @@
                   superpowers:writing-plans → docs/superpowers/plans/…          plan points at approved spec
                   acceptance-author subagent → apps/shell-e2e/src/<f>.spec.ts   must FAIL; committed alone
                   nx g @starter/tools:feature                                   refuses unapproved spec / unknown scope
-                  per task: red → green → pnpm verify:quick → commit            PostToolUse lint, Stop hook
+                  per task: red → green → pnpm verify:quick → commit            PostToolUse lint, Stop hook, commit-msg (Angular)
                   pnpm verify                                                   full gate incl. SSR e2e
                   spec-reviewer subagent                                        APPROVE required
                   superpowers:finishing-a-development-branch → PR               CI: verify:all + mutation
@@ -19,6 +19,7 @@
 ## Roles
 
 - **Human**: owns intent. Writes/approves specs, registers scopes, approves dependencies, merges.
+  Sets the repository to rebase-only merges so atomic commits reach `main` unchanged.
   Expected effort: 30–60 min per feature spec, 5–10 min per PR.
 - **Implementing agent** (Claude Code with Superpowers): everything between approval and PR.
 - **acceptance-author**: fresh context, spec-only input, writes failing Playwright tests.
@@ -26,6 +27,12 @@
 - **PR reviewer** (`.claude/hooks/pr-review.mjs`): fires after `gh pr create`; runs `/code-review` in a
   separate headless Claude Code process and posts confirmed findings as PR comments. Set
   `PR_REVIEW_SKIP=1` in your shell to opt out for a trivial PR.
+
+## Review fixes
+
+Fold each fix into the commit it belongs to; never add a "wip" or "address review" commit:
+`git commit --fixup=<sha>` → `git rebase --autosquash $(git merge-base HEAD origin/main)` →
+`pnpm verify` → `git push --force-with-lease`. Recipes in `docs/references/commits.md`.
 
 ## Artefacts and where they live
 

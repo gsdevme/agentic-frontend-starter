@@ -23,6 +23,10 @@
 
 spec-reviewer: APPROVE / REQUEST CHANGES (resolved)
 
+## Commits
+
+- [ ] Each commit is one logical change with an Angular header; review fixes squashed (no fixup!/wip)
+
 ## Spec ambiguities found
 
 <!-- things the agent had to guess; the human fixes the spec, not the code -->

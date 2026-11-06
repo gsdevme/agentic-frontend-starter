@@ -26,7 +26,7 @@ cannot mark work done until `pnpm verify` is green.
 ```bash
 nvm use                      # or `fnm use`: Node major from .nvmrc (pnpm install refuses others)
 npm i -g pnpm@10.28.0        # Node >= 25 ships no corepack; match package.json#packageManager
-pnpm install                 # also installs git hooks (pre-commit: verify:quick, pre-push: verify)
+pnpm install                 # also installs git hooks (pre-commit: verify:quick, commit-msg: commitlint, pre-push: verify)
 pnpm exec playwright install chromium
 pnpm verify:all              # everything should be green on a fresh clone
 pnpm nx run shell:serve      # SSR dev server → http://localhost:4200
