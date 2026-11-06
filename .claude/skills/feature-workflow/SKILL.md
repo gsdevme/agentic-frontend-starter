@@ -23,7 +23,7 @@ Tasks touch ≤ 5 files each and name the REQ ids they close.
 ## 2. Acceptance tests first (separate commit)
 
 Dispatch the `acceptance-author` subagent with the spec path. Commit its file alone:
-`git commit -m "test(<feature>): acceptance tests from <spec>"`. They must fail at this point.
+`git commit -m "test(<feature>): acceptance tests from <spec-topic>"`. They must fail at this point.
 
 ## 3. Scaffold
 
@@ -37,7 +37,8 @@ For data access: a `type:data` library (generator coming; until then copy the sh
 ## 4. Implement task by task
 
 For each plan task: write the unit test with its REQ id → run `pnpm nx test <project>` (red) →
-implement → green → `pnpm verify:quick` → commit. Use `superpowers:subagent-driven-development`
+implement → green → `pnpm verify:quick` → commit (one logical change, Angular header — see
+`docs/references/commits.md`). Use `superpowers:subagent-driven-development`
 for parallel tasks in separate worktrees (`superpowers:using-git-worktrees`).
 
 ## 5. Full gate

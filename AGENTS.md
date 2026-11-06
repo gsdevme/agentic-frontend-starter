@@ -5,17 +5,18 @@ agents write code. Nothing is "done" until `pnpm verify` passes — hooks enforc
 
 ## Map (read the file you need, not all of them)
 
-| Need                                            | Read                                                                         |
-| ----------------------------------------------- | ---------------------------------------------------------------------------- |
-| Non-negotiable rules                            | `docs/constitution.md`                                                       |
-| How a feature goes from idea to merged          | `docs/workflow.md`                                                           |
-| Library layers, tags, what may import what      | `docs/architecture/boundaries.md`                                            |
-| Registered domain scopes                        | `docs/architecture/scopes.md`                                                |
-| What each verification stage checks             | `docs/architecture/verification.md`                                          |
-| Things that bite (SSR host check, daemon, etc.) | `docs/references/landmines.md`                                               |
-| Spec / plan templates                           | `docs/superpowers/specs/_TEMPLATE.md`, `docs/superpowers/plans/_TEMPLATE.md` |
-| Angular v22 idioms the models get wrong         | `docs/references/angular-v22-rules.md`                                       |
-| Design system (tokens, components)              | `packages/shared/design-tokens/README.md`, `packages/shared/ui/README.md`    |
+| Need                                                | Read                                                                         |
+| --------------------------------------------------- | ---------------------------------------------------------------------------- |
+| Non-negotiable rules                                | `docs/constitution.md`                                                       |
+| How a feature goes from idea to merged              | `docs/workflow.md`                                                           |
+| Library layers, tags, what may import what          | `docs/architecture/boundaries.md`                                            |
+| Registered domain scopes                            | `docs/architecture/scopes.md`                                                |
+| What each verification stage checks                 | `docs/architecture/verification.md`                                          |
+| Things that bite (SSR host check, daemon, etc.)     | `docs/references/landmines.md`                                               |
+| Commit messages, atomic commits, rewriting a branch | `docs/references/commits.md`                                                 |
+| Spec / plan templates                               | `docs/superpowers/specs/_TEMPLATE.md`, `docs/superpowers/plans/_TEMPLATE.md` |
+| Angular v22 idioms the models get wrong             | `docs/references/angular-v22-rules.md`                                       |
+| Design system (tokens, components)                  | `packages/shared/design-tokens/README.md`, `packages/shared/ui/README.md`    |
 
 ## Commands (always via nx; never call eslint/vitest/ng directly)
 
@@ -41,7 +42,10 @@ dispatch `spec-reviewer` subagent → open PR. Superpowers skills (`brainstormin
 
 ## Hard rules the hooks enforce (don't fight them, fix the cause)
 
-- No `--no-verify`, no force-push, no `eslint-disable`, no `.only`/`.skip`, no deleting tests.
+- No `--no-verify`, no `--force`/`-f` push (`--force-with-lease` on your own feature branch only),
+  no `eslint-disable`, no `.only`/`.skip`, no deleting tests.
+- Angular commit headers (commitlint); one logical change per commit; squash review fixes, never
+  "wip"/"address review" commits (see `docs/references/commits.md`).
 - Approved specs under `docs/superpowers/specs/` and acceptance tests under `apps/*-e2e/` are
   human-owned: agents may add, never edit, unless the human says so (set `ALLOW_ACCEPTANCE_EDIT=1`).
 - Every test title starts with its requirement id: `it('[REQ-INVOICE-003] …')`.
