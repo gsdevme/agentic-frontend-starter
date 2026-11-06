@@ -36,12 +36,14 @@ recorded in `docs/adr/`.
 ## 5. Verification
 
 5.1 `pnpm verify` is the single definition of done. Hooks run `verify:quick` on Stop; CI runs `verify:all`. — _stop-verify hook, CI_
-5.2 No `--no-verify`, no force-push, no `eslint-disable`, no `.only`/`.skip`, no deleted tests. — _guard-bash hook, ESLint noInlineConfig, no-test-weakening.mjs_
+5.2 No `--no-verify`, no `--force`/`-f` push, no force-push of `main`/`master`/`release/*` (feature branches: `--force-with-lease` only), no `eslint-disable`, no `.only`/`.skip`, no deleted tests. — _guard-bash hook, ESLint noInlineConfig, no-test-weakening.mjs_
 5.3 Completion claims carry fresh verification output. — _superpowers:verification-before-completion_
 5.4 A fresh-context reviewer checks every change against its spec before a PR. — _spec-reviewer agent_
 5.5 Pure logic libraries meet the mutation-score threshold. — _Stryker (`break: 70`)_
+5.6 Commit messages follow the Angular convention (types build|ci|docs|feat|fix|perf|refactor|revert|style|test, header ≤ 72, `BREAKING CHANGE:` footer, never `!`). — _commitlint: commit-msg hook, commit-messages verify stage, CI_
+5.7 Commits are atomic: one logical change each; review fixes are amended/autosquashed into the commit they fix, never added as wip/review commits; history reaches main by rebase merge only. — _commit-messages verify stage, guard-bash hook, repo merge settings, PR reviewer_
 
 ## 6. Humans decide
 
-Specs and their approval, scopes, dependencies, guardrail configuration, acceptance-test changes, merges.
+Specs and their approval, scopes, dependencies, guardrail configuration, repository merge settings, acceptance-test changes, merges.
 Everything else is the agents' job.
