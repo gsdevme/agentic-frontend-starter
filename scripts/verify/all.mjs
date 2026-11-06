@@ -7,6 +7,10 @@
  *   pnpm verify            # affected projects (local / agent loop)
  *   pnpm verify --all      # everything (CI, release)
  *   pnpm verify --quick    # node version + spec gate + format + lint + typecheck + unit + traceability
+ *
+ * After the quick stages the full run begins with "commit messages" (commitlint over
+ * merge-base..HEAD). It stays out of --quick because pre-commit runs --quick, and a pending
+ * fixup! commit would then block the next commit.
  */
 import { spawnSync } from 'node:child_process';
 
@@ -28,6 +32,7 @@ const stages = [
   ...(quick
     ? []
     : [
+        ['commit messages', 'node scripts/verify/commit-messages.mjs'],
         [
           'dependency graph',
           'pnpm exec depcruise apps packages tools --config .dependency-cruiser.cjs',
