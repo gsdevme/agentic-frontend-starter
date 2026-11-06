@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+# Angular commit convention on every commit (commitlint.config.mjs).
+# fixup!/squash!/amend! commits pass here so `git rebase --autosquash` works;
+# the verify "commit messages" stage rejects them before anything is pushed.
+set -e
+case "$(head -n 1 "$1")" in
+  'fixup! '* | 'squash! '* | 'amend! '*) exit 0 ;;
+esac
+pnpm exec commitlint --edit "$1"
