@@ -31,11 +31,18 @@
       "Bash(git add *)",
       "Bash(git commit *)",
       "Bash(git switch *)",
-      "Bash(git worktree *)"
+      "Bash(git worktree *)",
+      "Bash(pnpm exec commitlint*)",
+      "Bash(git rebase --autosquash*)"
     ],
     "deny": [
-      "Bash(git push --force*)",
+      "Bash(git push --force)",
+      "Bash(git push --force *)",
+      "Bash(git push * --force)",
+      "Bash(git push * --force *)",
       "Bash(git push -f*)",
+      "Bash(git push * -f)",
+      "Bash(git push * -f *)",
       "Bash(git commit --no-verify*)",
       "Bash(git commit -n *)",
       "Bash(git reset --hard*)",

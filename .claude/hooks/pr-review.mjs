@@ -88,6 +88,7 @@ const systemPrompt = [
   'is not permitted, fall back to `gh pr comment` with the findings as a markdown list.',
   'If the review ends with no findings posted, post one `gh pr comment` saying the automated',
   'review found no issues, with one line on what was checked.',
+  'Also flag commits that mix unrelated changes or contain follow-up fixes to an earlier commit in the same PR.',
 ].join(' ');
 
 const allowedTools = [
