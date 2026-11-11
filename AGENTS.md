@@ -12,6 +12,7 @@ agents write code. Nothing is "done" until `pnpm verify` passes — hooks enforc
 | Library layers, tags, what may import what          | `docs/architecture/boundaries.md`                                            |
 | Registered domain scopes                            | `docs/architecture/scopes.md`                                                |
 | What each verification stage checks                 | `docs/architecture/verification.md`                                          |
+| A/B testing and edge caching (design, unbuilt)      | `docs/architecture/experiments.md`                                           |
 | Things that bite (SSR host check, daemon, etc.)     | `docs/references/landmines.md`                                               |
 | Commit messages, atomic commits, rewriting a branch | `docs/references/commits.md`                                                 |
 | Spec / plan templates                               | `docs/superpowers/specs/_TEMPLATE.md`, `docs/superpowers/plans/_TEMPLATE.md` |
