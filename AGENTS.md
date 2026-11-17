@@ -60,6 +60,8 @@ dispatch `spec-reviewer` subagent → open PR. Superpowers skills (`brainstormin
 
 - Angular SSR rejects unknown `Host` headers (400). Allowed hosts: `apps/shell/project.json` →
   `security.allowedHosts`; at runtime `NG_ALLOWED_HOSTS=a.example.com,b.example.com`.
+- Superpowers/nx skills missing in a cloud session: run `pnpm install` (its `prepare` script installs
+  the enabled plugins), then ask the human for `/reload-plugins` or a new session.
 - If lint says a package "is not used" for an import that clearly exists, the Nx daemon graph is
   stale: `pnpm nx reset` and rerun. Don't edit package.json to appease it.
 - `@nx/dependency-checks` wants each library's `package.json` peerDependencies to match real imports.

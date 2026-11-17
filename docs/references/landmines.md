@@ -20,6 +20,17 @@ against `.nvmrc`. `.npmrc` sets `engine-strict=true`, so `pnpm install` refuses 
 run `nvm use` first. Node >= 25 dropped corepack, so install pnpm with
 `npm i -g pnpm@<packageManager version>` after `nvm use`.
 
+## Cloud sessions start without the plugins
+
+`.claude/settings.json` only declares `superpowers` and `nx`. A local session offers to install
+them; a fresh Claude Code cloud container has neither, so `brainstorming`, `nx-generate` and the
+rest are missing. `pnpm install` fixes that: its `prepare` script runs
+`scripts/install-claude-plugins.mjs`, which installs whatever `enabledPlugins` lists (cloud only,
+user scope). Plugins load when a session starts, so the skills appear in the next session or after
+`/reload-plugins`, not in the one that ran the install. Never run `claude plugin uninstall` or
+`claude plugin marketplace remove` from inside the checkout: the CLI rewrites
+`.claude/settings.json` and drops the declarations.
+
 ## Stale Nx project graph
 
 Symptoms: `@nx/dependency-checks` says a package "is not used" although it is imported; a generator
