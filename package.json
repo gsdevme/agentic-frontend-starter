@@ -19,7 +19,7 @@
     "mutate": "stryker run",
     "format": "nx format:write",
     "format:check": "nx format:check",
-    "prepare": "node .claude/hooks/install-git-hooks.mjs"
+    "prepare": "node .claude/hooks/install-git-hooks.mjs && node scripts/install-claude-plugins.mjs"
   },
   "private": true,
   "devDependencies": {
